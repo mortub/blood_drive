@@ -9,4 +9,4 @@ app = FastAPI()
 def read_root():
     donation = Donation()
     res = donation.get_donations()
-    return {"Hello": res}
+    return {"donations_list": res}

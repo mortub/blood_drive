@@ -1,16 +1,6 @@
 import requests
 import json
-
-
-class DonationInfo:
-    def __init__(self, DateDonation, FromHour, ToHour, Name, Street, NumHouse, AccountType):
-        self.date_donation = DateDonation
-        self.from_hour = FromHour
-        self.to_hour = ToHour
-        self.name = Name
-        self.street = Street
-        self.num_house = NumHouse
-        self.account_type = AccountType
+from .DonationInfo import DonationInfo
 
 
 class Donation:
@@ -18,18 +8,22 @@ class Donation:
         with open('core\services\mada_response.json', 'r', encoding='utf-8') as read_file:
             data = json.load(read_file)
             read_file.close()
-        return self.__get_donation_info(data)
+        return self.__get_donations_info(data)
 
-    def __get_donation_info(self, data):
+    def __get_donations_info(self, data):
         if data['Success']:
-            donation = json.loads(
-                data['Result'].strip('][').split('},')[0] + '}')
-            donation_info = DonationInfo(donation['DateDonation'], donation['FromHour'],
-                                         donation['ToHour'], donation['Name'], donation['Street'],
-                                         donation['NumHouse'], donation['AccountType'])
-            print(donation_info)
-            return donation_info
+            donations = data['Result'].strip('][').split('},')
+            result = list(map(self.__get_donation_info, donations))
+            return result
         return None
+
+    def __get_donation_info(self, donation_string):
+        donation = json.loads(
+            donation_string) if donation_string[-1] == '}' else json.loads(donation_string + '}')
+        donation_info = DonationInfo(donation['DateDonation'], donation['FromHour'],
+                                     donation['ToHour'], donation['Name'], donation['City'], donation['Street'],
+                                     donation['NumHouse'], donation['AccountType'],)
+        return donation_info
 
     def __fatch_donation_info():
         URL = "https://www.mdais.org/umbraco/api/invoker/execute"
