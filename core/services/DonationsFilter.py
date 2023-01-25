@@ -2,35 +2,34 @@ from .Donation import Donation
 
 
 class DonationsFilter:
-    async def get_donations_filter(skip: int = 0, limit: int = 100, city: str | None = None, distance: float | None = None ):
-        # TODO: add validations - if city exist - is it from the list of possible cities?
-        donation = Donation()
-        donations_list = donation.get_donations()
-        filtered_donations_list = []
-        filtering_fields = {
+    filtering_fields = {}
+    async def get_donations_filter(skip: int = 0, limit: int = 100, city: str | None = None):
+        donations_list = Donation().get_donations()
+        DonationsFilter.filtering_fields = {
             'city': city
         }
-        #TODO: do it for all filtering_fields fields in a loop
-        filtered_donations_list = DonationsFilter.filter_according_to_field(donations_list, "city", filtering_fields['city'])
+
+        filtered_donations_list = DonationsFilter.__filter_according_to_field(donations_list)
 
         return {"skip": skip, "limit": limit, "result": filtered_donations_list}
 
-    #TODO: make private
-    def filter_according_to_field(donations_list, filtering_field_key ,filtering_field_value):
-        filtered_donations_list = []
-        for donation in donations_list:
-            donation_field = getattr(donation, filtering_field_key)
-            if filtering_field_value in donation_field or filtering_field_value in donation.name:
-                filtered_donations_list.append(donation)
-        return filtered_donations_list
+    def __filter_according_to_field(donations_list):
+        filtered = filter(DonationsFilter.__get_filtered_donation, donations_list)
+        return list(filtered)
 
-    #TODO: do this line with try catch:  donation_field = getattr(donation, filtering_field_key)
-    def get_donation_att():
-        pass
-    # for name in 'a', 'b', 'c':
-    # try:
-    #     thing = getattr(obj, name)
-    # except AttributeError:
-    #     pass
-    # else:
-        # break
+    def __get_filtered_donation(donation):
+        for key in DonationsFilter.filtering_fields:
+            value = DonationsFilter.filtering_fields[key]
+            if value is None : return True
+            donation_att = DonationsFilter.__get_donation_att(donation, key)
+            if not value in donation_att and not value in donation.name:
+                return False
+            print('will return true')
+        return True
+
+    def __get_donation_att(donation, key):
+        try:
+            return getattr(donation, key)
+        except AttributeError:
+            print(f'could not get {key} from {donation}')
+            return ''
