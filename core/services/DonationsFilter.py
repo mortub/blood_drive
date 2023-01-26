@@ -3,10 +3,11 @@ from .DonationsFilterStrategy import DonationsFilterStrategy
 
 class DonationsFilter:
     filtering_fields = {}
-    async def get_donations_filter(skip: int = 0, limit: int = 100, city: str | None = None):
+    async def get_donations_filter(skip: int = 0, limit: int = 100, city: str | None = None, dates_range: str | None = None):
         donations_list = Donation().get_donations()
         DonationsFilter.filtering_fields = {
-            'city': city
+            'city': city,
+            'dates_range': dates_range
         }
 
         filtered_donations_list = DonationsFilter.__filter_according_to_field(donations_list)
@@ -22,5 +23,6 @@ class DonationsFilter:
             value = DonationsFilter.filtering_fields[key]
             func_name = key + '_filter'
             func = getattr(DonationsFilterStrategy,func_name,DonationsFilterStrategy.func_not_found)
-            response = func(value, donation) and response
+            result = func(value, donation)
+            response = result and response
         return response
