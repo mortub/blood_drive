@@ -7,9 +7,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    donation = Donation()
-    res = donation.get_donations()
-    return {"donations_list": res}
+    return {"donations_list": Donation().get_donations()}
 
 # TODO: add limit + offset for pagination
 @app.get("/donations")

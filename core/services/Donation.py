@@ -13,19 +13,17 @@ class Donation:
     def __get_donations_info(self, data):
         if data['Success']:
             donations = data['Result'].strip('][').split('},')
-            result = list(map(self.__get_donation_info, donations))
+            result = map(self.__get_donation_info, donations)
             return result
         return None
 
     def __get_donation_info(self, donation_string):
         donation = json.loads(
             donation_string) if donation_string[-1] == '}' else json.loads(donation_string + '}')
-        donation_info = DonationInfo(donation['DateDonation'], donation['FromHour'],
-                                     donation['ToHour'], donation['Name'], donation['City'], donation['Street'],
-                                     donation['NumHouse'], donation['AccountType'],)
+        donation_info = DonationInfo(donation)
         return donation_info
 
-    def __fatch_donation_info():
+    def __fetch_donation_info():
         URL = "https://www.mdais.org/umbraco/api/invoker/execute"
         headers = {'Content-type': 'application/json',
                    'Accept': 'application/json, text/plain, */*', 'Accept-language': 'he',

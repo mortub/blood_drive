@@ -1,20 +1,20 @@
 class DonationInfo:
-    def __init__(self, DateDonation, FromHour, ToHour, Name, City, Street, NumHouse, AccountType):
-        self.date_donation = DateDonation
-        self.from_hour = FromHour
-        self.to_hour = ToHour
-        self.name = Name
-        self.city = City
-        self.street = Street
-        self.num_house = NumHouse
-        self.account_type = AccountType
+    list_of_fields = ['DateDonation', 'FromHour', 'ToHour', 'Name', 'City', 'Street', 'NumHouse', 'AccountType']
+
+    def __init__(self, donation):
+        self.__set_donation_fields(donation)
+
+    def __set_donation_fields(self, donation):
+        [self.__set_donation_field(donation_field_name, donation) for donation_field_name in self.list_of_fields]
+
+    def __set_donation_field(self, donation_field_name, donation):
+        if donation_field_name not in donation:
+            donation[donation_field_name] = ''
+        self.__dict__[donation_field_name] = donation[donation_field_name]
 
     def __repr__(self):
-        return f'''date_donation:{self.date_donation},
-        from_hour:{self.from_hour},
-        to_hour:{self.to_hour},
-        name:{self.name},
-        city: {self.city},
-        street:{self.street},
-        num_house:{self.num_house},
-        account_type:{self.account_type}.'''
+        class_string ='{'
+        for field in self.list_of_fields:
+            class_string += f'''{field}: {self.__dict__[field]};'''
+        class_string = class_string[:-1] + '}'
+        return class_string

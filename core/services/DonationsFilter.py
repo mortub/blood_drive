@@ -6,11 +6,10 @@ class DonationsFilter:
     async def get_donations_filter(skip: int = 0, limit: int = 100, city: str | None = None):
         donations_list = Donation().get_donations()
         DonationsFilter.filtering_fields = {
-            'city': city
+            'City': city
         }
 
         filtered_donations_list = DonationsFilter.__filter_according_to_field(donations_list)
-
         return {"skip": skip, "limit": limit, "result": filtered_donations_list}
 
     def __filter_according_to_field(donations_list):
@@ -22,9 +21,8 @@ class DonationsFilter:
             value = DonationsFilter.filtering_fields[key]
             if value is None : return True
             donation_att = DonationsFilter.__get_donation_att(donation, key)
-            if not value in donation_att and not value in donation.name:
+            if not value in donation_att and not value in donation.Name:
                 return False
-            print('will return true')
         return True
 
     def __get_donation_att(donation, key):
