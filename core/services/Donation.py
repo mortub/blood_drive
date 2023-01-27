@@ -10,14 +10,14 @@ class Donation:
             read_file.close()
         return self.__get_donations_info(data)
 
-    def __get_donations_info(self, data):
+    def __get_donations_info(self, data: dict):
         if data['Success']:
             donations = data['Result'].strip('][').split('},')
             result = map(self.__get_donation_info, donations)
             return result
         return None
 
-    def __get_donation_info(self, donation_string):
+    def __get_donation_info(self, donation_string: str):
         donation = json.loads(
             donation_string) if donation_string[-1] == '}' else json.loads(donation_string + '}')
         donation_info = DonationInfo(donation)
