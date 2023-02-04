@@ -1,4 +1,6 @@
-class DonationInfo:
+from dataclasses import dataclass
+
+class DonationDomain:
     LIST_OF_FIELDS = ['DateDonation', 'FromHour', 'ToHour', 'Name', 'City', 'Street', 'NumHouse', 'AccountType']
 
     def __init__(self, donation: dict):
@@ -18,3 +20,6 @@ class DonationInfo:
             class_string += f'''{field}: {self.__dict__[field]};'''
         class_string = class_string[:-1] + '}'
         return class_string
+
+
+

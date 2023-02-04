@@ -1,6 +1,6 @@
 import requests
 import json
-from .DonationInfo import DonationInfo
+from .DonationDomain import DonationDomain
 
 
 class Donation:
@@ -20,7 +20,7 @@ class Donation:
     def __get_donation_info(self, donation_string: str):
         donation = json.loads(
             donation_string) if donation_string[-1] == '}' else json.loads(donation_string + '}')
-        donation_info = DonationInfo(donation)
+        donation_info = DonationDomain(donation)
         return donation_info
 
     def __fetch_donation_info():
