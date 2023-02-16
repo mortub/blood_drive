@@ -26,7 +26,7 @@ def create_donation():
 
 @app.post("/settlement")
 def create_settlement():
-    donation = list(Donation().get_donations())[1]
+    donation = list(Donation().get_donations())[0]
     donations_graph = DonationsGraph()
     result = SettlementRepository(donations_graph.driver).create(donation)
     donations_graph.close()

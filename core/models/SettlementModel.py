@@ -1,4 +1,5 @@
 from neo4j import GraphDatabase
+from fastapi import HTTPException
 from ..services.DonationDomain import DonationDomain
 from ..utils.datasources.SettlementsDatasource import SettlementsDatasource
 
@@ -8,14 +9,13 @@ class SettlementModel():
         try:
             settlement_name = SettlementModel.__extract_settlement_name_from_donation(donation)
             return SettlementsDatasource.get_settlement_by_name(settlement_name)
-        except Exception as err:
-            print(f"Unexpected {err=}, {type(err)=}")
-            return
+        except Exception as error:
+            raise HTTPException(status_code=error.args[1], detail=f'Could not create a Settlement node, {str(error.args[0])}')
 
     @classmethod
     def __extract_settlement_name_from_donation(cls, donation: DonationDomain):
         settlement_name = donation.__dict__['City']
         if not settlement_name or settlement_name == None:
-            raise Exception("City not provided in donation")
+            raise KeyError('City not provided in donation', 400)
         settlement_name = (settlement_name + ' ').replace(' ', '%20')
         return settlement_name
