@@ -15,10 +15,10 @@ class DonationModel():
     @classmethod
     def __map_domain_donation_to_node_donation(cls, donation: DonationDomain):
         return {
-            'donation_date': cls.__make_donation_date(donation.__dict__['DateDonation']),
-            'from_hour': donation.__dict__['FromHour'],
-            'to_hour': donation.__dict__['ToHour'],
-            'name' : donation.__dict__['Name']
+            'donation_date': cls.__make_donation_date(donation.__dict__['DateDonation']).strip(),
+            'from_hour': donation.__dict__['FromHour'].strip(),
+            'to_hour': donation.__dict__['ToHour'].strip(),
+            'name' : donation.__dict__['Name'].strip()
         }
 
     @classmethod

@@ -28,7 +28,7 @@ class SettlementModel():
             'subdistrict' : 'שם_נפה'
         }
         for key, settlement_record_key in settlement.items():
-            settlement[key] = cls.__get_settlement_record_value_by_key(settlement_record, settlement_record_key)
+            settlement[key] = cls.__get_settlement_record_value_by_key(settlement_record, settlement_record_key).strip()
         return settlement
 
     @classmethod
